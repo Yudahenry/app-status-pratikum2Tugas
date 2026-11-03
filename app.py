@@ -1,3 +1,4 @@
+import os
 import time
 import pandas as pd
 import streamlit as st
@@ -5,6 +6,37 @@ from groq import Groq
 from classifier import NAMA_FITUR, classify, load_config
 
 st.set_page_config(page_title="Telco Churn (LLM)", page_icon="🤖", layout="centered")
+
+# --- OTOMATIS BUAT FILE CONTOH DATA CSV JIKA BELUM ADA ---
+if not os.path.exists("contoh_data_baru.csv"):
+    sample_data = pd.DataFrame([
+        {
+            "tenure": 12, "MonthlyCharges": 65.00, "TotalCharges": 800.00,
+            "Contract": "Month-to-month", "PaymentMethod": "Electronic check",
+            "InternetService": "DSL", "PaperlessBilling": "Yes", "gender": "Female"
+        },
+        {
+            "tenure": 34, "MonthlyCharges": 56.95, "TotalCharges": 1889.50,
+            "Contract": "One year", "PaymentMethod": "Mailed check",
+            "InternetService": "DSL", "PaperlessBilling": "No", "gender": "Male"
+        },
+        {
+            "tenure": 2, "MonthlyCharges": 70.70, "TotalCharges": 151.65,
+            "Contract": "Month-to-month", "PaymentMethod": "Electronic check",
+            "InternetService": "Fiber optic", "PaperlessBilling": "Yes", "gender": "Female"
+        },
+        {
+            "tenure": 45, "MonthlyCharges": 42.30, "TotalCharges": 1840.75,
+            "Contract": "One year", "PaymentMethod": "Bank transfer (automatic)",
+            "InternetService": "DSL", "PaperlessBilling": "No", "gender": "Male"
+        },
+        {
+            "tenure": 62, "MonthlyCharges": 89.10, "TotalCharges": 5500.00,
+            "Contract": "Two year", "PaymentMethod": "Credit card (automatic)",
+            "InternetService": "Fiber optic", "PaperlessBilling": "Yes", "gender": "Male"
+        }
+    ])
+    sample_data.to_csv("contoh_data_baru.csv", index=False)
 
 # ---------- 1. Muat konfigurasi hasil evaluasi & siapkan client ----------
 cfg = load_config("config.json")
@@ -101,17 +133,20 @@ with tab2:
     st.write("Unggah file CSV dengan kolom fitur: " + ", ".join(f"`{c}`" for c in FITUR)
              + " (dibatasi maksimal 30 baris agar hemat kuota API Groq).")
     
-    # Tombol unduh sampel CSV jika tersedia
+    # 📥 Tombol unduh sampel CSV uji coba (Selalu tersedia)
     try:
         with open("contoh_data_baru.csv", "rb") as f:
             st.download_button(
-                label="📥 Unduh Contoh Format File CSV",
+                label="📥 Unduh Dataset / Contoh Format File CSV Uji Coba",
                 data=f,
                 file_name="contoh_data_baru.csv",
-                mime="text/csv"
+                mime="text/csv",
+                help="Klik untuk mengunduh sampel data CSV untuk diunggah ke form di bawah."
             )
-    except FileNotFoundError:
-        pass
+    except Exception as e:
+        st.warning(f"Gagal memuat file unduhan: {e}")
+
+    st.markdown("---")
 
     file = st.file_uploader("Pilih file CSV pelanggan", type="csv")
     if file is not None:
