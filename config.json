@@ -1,0 +1,72 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "temperature": 0,
+  "max_tokens": 1240,
+  "labels": [
+    "No",
+    "Yes"
+  ],
+  "system_prompt": "Kamu adalah sistem klasifikasi Telco Customer Churn.\nData pelanggan telekomunikasi mencakup: lama berlangganan (tenure dalam bulan), biaya bulanan, total biaya, jenis kontrak, metode pembayaran, layanan internet, tagihan tanpa kertas, dan jenis kelamin.\nLabel:\n- No: Pelanggan tetap aktif (tidak churn)\n- Yes: Pelanggan berhenti berlangganan (churn)\nJawab HANYA dengan satu kata: No atau Yes.",
+  "few_shot": [
+    {
+      "data": {
+        "tenure": 29,
+        "MonthlyCharges": 75.35,
+        "TotalCharges": 2243.9,
+        "Contract": "One year",
+        "PaymentMethod": "Bank transfer (automatic)",
+        "InternetService": "DSL",
+        "PaperlessBilling": "Yes",
+        "gender": "Male"
+      },
+      "label": "No"
+    },
+    {
+      "data": {
+        "tenure": 10,
+        "MonthlyCharges": 73.55,
+        "TotalCharges": 693.3,
+        "Contract": "One year",
+        "PaymentMethod": "Credit card (automatic)",
+        "InternetService": "DSL",
+        "PaperlessBilling": "No",
+        "gender": "Female"
+      },
+      "label": "No"
+    },
+    {
+      "data": {
+        "tenure": 3,
+        "MonthlyCharges": 70.3,
+        "TotalCharges": 235.5,
+        "Contract": "Month-to-month",
+        "PaymentMethod": "Electronic check",
+        "InternetService": "Fiber optic",
+        "PaperlessBilling": "Yes",
+        "gender": "Female"
+      },
+      "label": "Yes"
+    },
+    {
+      "data": {
+        "tenure": 26,
+        "MonthlyCharges": 88.8,
+        "TotalCharges": 2274.35,
+        "Contract": "Month-to-month",
+        "PaymentMethod": "Bank transfer (automatic)",
+        "InternetService": "Fiber optic",
+        "PaperlessBilling": "Yes",
+        "gender": "Female"
+      },
+      "label": "Yes"
+    }
+  ],
+  "evaluasi": {
+    "accuracy": 0.8,
+    "f1_macro": 0.7964,
+    "invalid": 0,
+    "n": 30,
+    "dataset": "WA_Fn-UseC_-Telco-Customer-Churn.csv (validation set)",
+    "tanggal": "2026-11-03"
+  }
+}
